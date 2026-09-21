@@ -1,0 +1,71 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == "berlyws7296@gmail.com"
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Settings Collection
+    match /settings/{settingId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin() && isValidId(settingId);
+    }
+
+    // Pages Collection
+    match /pages/{pageId} {
+      // Public can read visible pages, Admin can read all
+      allow get, list: if isAdmin() || (resource.data.visible == true);
+      allow create, update, delete: if isAdmin() && isValidId(pageId);
+    }
+
+    // Projects Collection
+    match /projects/{projectId} {
+      // Public can read visible projects, Admin can read all
+      allow get, list: if isAdmin() || (resource.data.visible == true);
+      allow create, update, delete: if isAdmin() && isValidId(projectId);
+    }
+
+    // Services Collection
+    match /services/{serviceId} {
+      allow get, list: if isAdmin() || (resource.data.visible == true);
+      allow create, update, delete: if isAdmin() && isValidId(serviceId);
+    }
+
+    // Messages Collection
+    match /messages/{messageId} {
+      // Public can only create valid contact messages
+      allow create: if isValidId(messageId) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100 &&
+        request.resource.data.email is string && request.resource.data.email.size() > 0 && request.resource.data.email.size() <= 150 &&
+        request.resource.data.message is string && request.resource.data.message.size() > 0 && request.resource.data.message.size() <= 3000;
+      
+      // Only authenticated admin can read, update, or delete messages
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    // Admins Collection
+    match /admins/{adminUid} {
+      allow get: if isSignedIn() && request.auth.uid == adminUid;
+      allow read, write: if isAdmin();
+    }
+  }
+}

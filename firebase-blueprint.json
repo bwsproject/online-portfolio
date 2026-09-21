@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "Page": {
+      "title": "Page",
+      "description": "A book page in the 3D interactive portfolio",
+      "type": "object",
+      "properties": {
+        "pageNumber": { "type": "number", "description": "Page sequence number" },
+        "title": { "type": "string", "maxLength": 100, "description": "Page title" },
+        "subtitle": { "type": "string", "maxLength": 150, "description": "Page subtitle" },
+        "pageType": { "type": "string", "maxLength": 50, "description": "Type of page layout" },
+        "content": { "type": "string", "maxLength": 5000, "description": "Body markdown/text content" },
+        "imageUrl": { "type": "string", "maxLength": 500, "description": "Featured image URL" },
+        "projectId": { "type": "string", "maxLength": 100, "description": "Associated project ID" },
+        "buttonText": { "type": "string", "maxLength": 50, "description": "Optional CTA button label" },
+        "buttonUrl": { "type": "string", "maxLength": 500, "description": "Optional CTA URL" },
+        "visible": { "type": "boolean", "description": "Public visibility flag" },
+        "pageOrder": { "type": "number", "description": "Sort order index" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last update" }
+      },
+      "required": ["pageNumber", "title", "pageType", "visible", "pageOrder"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A detailed portfolio showcase project item",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 120, "description": "Project title" },
+        "category": { "type": "string", "maxLength": 80, "description": "Project discipline category" },
+        "shortDescription": { "type": "string", "maxLength": 300, "description": "Short card summary" },
+        "description": { "type": "string", "maxLength": 4000, "description": "Full detailed description" },
+        "problem": { "type": "string", "maxLength": 1000, "description": "Problem statement" },
+        "solution": { "type": "string", "maxLength": 1000, "description": "Engineered solution" },
+        "coverImage": { "type": "string", "maxLength": 500, "description": "Cover screenshot/render URL" },
+        "videoUrl": { "type": "string", "maxLength": 500, "description": "Optional showcase video URL" },
+        "result": { "type": "string", "maxLength": 500, "description": "Quantifiable impact or result" },
+        "externalUrl": { "type": "string", "maxLength": 500, "description": "Live production link" },
+        "projectOrder": { "type": "number", "description": "Sort order index" },
+        "visible": { "type": "boolean", "description": "Visibility flag" }
+      },
+      "required": ["title", "category", "shortDescription", "coverImage", "visible", "projectOrder"]
+    },
+    "Service": {
+      "title": "Service",
+      "description": "Offered technology capability or service offering",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 80, "description": "Service name" },
+        "description": { "type": "string", "maxLength": 500, "description": "Summary of offering" },
+        "iconName": { "type": "string", "maxLength": 50, "description": "Lucide icon identifier" },
+        "order": { "type": "number", "description": "Sort order index" },
+        "visible": { "type": "boolean", "description": "Visibility flag" }
+      },
+      "required": ["title", "description", "order", "visible"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Visitor contact inquiries submitted through the contact page",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100, "description": "Sender name" },
+        "email": { "type": "string", "maxLength": 150, "description": "Sender email" },
+        "whatsapp": { "type": "string", "maxLength": 50, "description": "Optional WhatsApp number" },
+        "message": { "type": "string", "maxLength": 3000, "description": "Inquiry message content" },
+        "read": { "type": "boolean", "description": "Admin read status" }
+      },
+      "required": ["name", "email", "message"]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "Portfolio global configuration and author metadata",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150, "description": "Portfolio site title" },
+        "name": { "type": "string", "maxLength": 80, "description": "Author display name" },
+        "tagline": { "type": "string", "maxLength": 150, "description": "Author tagline" },
+        "bio": { "type": "string", "maxLength": 1000, "description": "Author biography" },
+        "email": { "type": "string", "maxLength": 150, "description": "Author contact email" },
+        "whatsapp": { "type": "string", "maxLength": 50, "description": "WhatsApp contact number" },
+        "linkedin": { "type": "string", "maxLength": 200, "description": "LinkedIn profile URL" },
+        "instagram": { "type": "string", "maxLength": 200, "description": "Instagram profile URL" },
+        "github": { "type": "string", "maxLength": 200, "description": "GitHub profile URL" },
+        "website": { "type": "string", "maxLength": 200, "description": "Official website URL" },
+        "theme": { "type": "string", "maxLength": 50, "description": "Active color theme" }
+      },
+      "required": ["title", "name", "email"]
+    }
+  },
+  "firestore": {
+    "/pages/{pageId}": {
+      "schema": "Page",
+      "description": "Dynamic book pages managed by the administrator"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Showcase portfolio projects with media, specs, and results"
+    },
+    "/services/{serviceId}": {
+      "schema": "Service",
+      "description": "Technical capabilities and service offerings"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Private contact inquiries sent by visitors to Berly"
+    },
+    "/settings/{settingId}": {
+      "schema": "Setting",
+      "description": "Global portfolio configuration document"
+    },
+    "/admins/{adminUid}": {
+      "schema": "Setting",
+      "description": "Trusted administrative users who can manage the portfolio"
+    }
+  }
+}

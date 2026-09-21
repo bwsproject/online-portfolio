@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == "berlyws7296@gmail.com"
+      );
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.size <= 10 * 1024 * 1024; // 10MB limit
+    }
+
+    function isVideo() {
+      return request.resource.contentType.matches('video/.*') &&
+             request.resource.size <= 50 * 1024 * 1024; // 50MB limit
+    }
+
+    // Public portfolio media assets
+    match /portfolio/{allPaths=**} {
+      // Public can read media
+      allow read: if true;
+      // Only authenticated admin can upload/manage media
+      allow write: if isAdmin() && (isImage() || isVideo());
+    }
+
+    // Default deny for everything else
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --book-perspective: 2000px;
+    --gold-primary: #c5a059;
+    --gold-light: #e8cca4;
+    --gold-dark: #8c6e32;
+    --dark-bg: #0d0f12;
+    --dark-surface: #14171d;
+    --page-bg: #181b22;
+    --page-paper: #121419;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--dark-bg);
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Syne', sans-serif;
+  }
+
+  .font-serif-luxury {
+    font-family: 'Cinzel', serif;
+  }
+
+  .font-mono-code {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* 3D Book Styles */
+.perspective-book {
+  perspective: 2200px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Realistic Spine Shadow */
+.book-spine-shadow-left {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 4%, rgba(0, 0, 0, 0.05) 12%, transparent 25%);
+}
+
+.book-spine-shadow-right {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 4%, rgba(0, 0, 0, 0.05) 12%, transparent 25%);
+}
+
+.book-gutter-center {
+  background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0.5) 100%);
+}
+
+/* Book page dynamic turn shadow */
+.page-turn-shadow {
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* 3D Realistic Tactile Book Page Flip Keyframes with Curl Deformation */
+@keyframes flipNextLeaf {
+  0% {
+    transform: rotateY(0deg) skewY(0deg) scale(1);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.4);
+    filter: brightness(1);
+  }
+  25% {
+    /* Paper starts bending upwards and flexing along vertical axis */
+    transform: rotateY(-40deg) skewY(1.8deg) scaleX(0.97) scaleY(1.01);
+    box-shadow: -15px 5px 25px rgba(0, 0, 0, 0.7);
+    filter: brightness(1.05);
+  }
+  50% {
+    /* Maximum paper lift & curl curvature at 90 deg transition */
+    transform: rotateY(-90deg) skewY(2.8deg) scaleX(0.94) scaleY(1.02);
+    box-shadow: -30px 10px 45px rgba(0, 0, 0, 0.85);
+    filter: brightness(0.92);
+  }
+  75% {
+    /* Paper landing flex toward opposite spread */
+    transform: rotateY(-140deg) skewY(-1.5deg) scaleX(0.98) scaleY(1.01);
+    box-shadow: -15px 5px 25px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.03);
+  }
+  100% {
+    transform: rotateY(-180deg) skewY(0deg) scale(1);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    filter: brightness(1);
+  }
+}
+
+@keyframes flipPrevLeaf {
+  0% {
+    transform: rotateY(-180deg) skewY(0deg) scale(1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
+    filter: brightness(1);
+  }
+  25% {
+    /* Reverse paper curling curve */
+    transform: rotateY(-140deg) skewY(-1.8deg) scaleX(0.97) scaleY(1.01);
+    box-shadow: 15px 5px 25px rgba(0, 0, 0, 0.7);
+    filter: brightness(1.05);
+  }
+  50% {
+    /* Peak curl */
+    transform: rotateY(-90deg) skewY(-2.8deg) scaleX(0.94) scaleY(1.02);
+    box-shadow: 30px 10px 45px rgba(0, 0, 0, 0.85);
+    filter: brightness(0.92);
+  }
+  75% {
+    /* Landing curve */
+    transform: rotateY(-40deg) skewY(1.5deg) scaleX(0.98) scaleY(1.01);
+    box-shadow: 15px 5px 25px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.03);
+  }
+  100% {
+    transform: rotateY(0deg) skewY(0deg) scale(1);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    filter: brightness(1);
+  }
+}
+
+.animate-flip-next-leaf {
+  animation: flipNextLeaf 0.62s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  transform-origin: left center;
+  will-change: transform, filter, box-shadow;
+}
+
+.animate-flip-prev-leaf {
+  animation: flipPrevLeaf 0.62s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  transform-origin: left center;
+  will-change: transform, filter, box-shadow;
+}
+
+/* Foil / Gold metallic shine */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #f7eed8 0%, #d4af37 40%, #aa7c11 75%, #f3e5ab 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.silver-gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+/* Smooth custom scrollbars for modals */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f1115;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e39;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c5a059;
+}
+

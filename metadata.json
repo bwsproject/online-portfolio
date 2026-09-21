@@ -1,0 +1,6 @@
+{
+  "name": "BERLY — 3D Interactive Portfolio",
+  "description": "A premium 3D digital interactive book portfolio featuring realistic page-turn physics, project showcases, Firestore CMS, and admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
